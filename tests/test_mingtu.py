@@ -220,3 +220,29 @@ def test_profile_roundtrip_and_suggestions(tmp_path, monkeypatch):
     assert again["summary"]["n"] == 3
     assert again["summary"]["hit_rate"] == 0.0
     assert any("婚恋" in a for a in again["adjustments"])
+
+
+# ------------------------------------------------------------------ packaging
+
+def test_sources_parse_under_older_grammars():
+    """Developing on 3.14 hides constructs that 3.9-3.11 reject — PEP 701
+    f-strings being the one that actually bit. Parse every module against the
+    oldest grammar we claim to support."""
+    import ast
+    import pathlib
+    root = pathlib.Path(__file__).resolve().parent.parent
+    files = sorted((root / "src" / "mingtu").glob("*.py"))
+    assert files, "no sources found"
+    for p in files:
+        src = p.read_text(encoding="utf-8")
+        for minor in (9, 11):
+            ast.parse(src, filename=str(p), feature_version=(3, minor))
+
+
+def test_cli_exposes_every_documented_subcommand():
+    from mingtu.cli import build_parser
+    ap = build_parser()
+    actions = [a for a in ap._subparsers._group_actions if a.choices]
+    names = set(actions[0].choices)
+    assert {"full", "chart", "life", "day", "hour",
+            "render", "profile"} <= names

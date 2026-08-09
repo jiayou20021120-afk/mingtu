@@ -640,18 +640,18 @@ def build(args):
 def print_summary(chart, out_path=None):
     m, b = chart["meta"], chart["bazi"]
     if out_path:
-        print(f"\u2713 {out_path}")
-    print(f"  \u56db\u67f1 {' '.join(p['ganzhi'] for p in b['pillars'])}"
-          f"  \u65e5\u4e3b {b['day_master']['gan']}({b['day_master']['wuxing']})"
-          f"  {b['strength']['label']}  {b['geju']['name']}\u00b7{b['geju']['status']}")
-    print(f"  \u7528\u795e {'/'.join(b['yongshen']['favor'])}"
-          f"  \u5fcc {'/'.join(b['yongshen']['avoid'])}"
+        print(f"✓ {out_path}")
+    print(f"  四柱 {' '.join(p['ganzhi'] for p in b['pillars'])}"
+          f"  日主 {b['day_master']['gan']}({b['day_master']['wuxing']})"
+          f"  {b['strength']['label']}  {b['geju']['name']}·{b['geju']['status']}")
+    print(f"  用神 {'/'.join(b['yongshen']['favor'])}"
+          f"  忌 {'/'.join(b['yongshen']['avoid'])}"
           f"  [{b['yongshen']['method']}]")
     if m["shichen_boundary_flip"]:
-        print(f"  \u26a0 \u771f\u592a\u9633\u65f6\u4f7f\u65f6\u8fb0\u7531 {m['shichen_clock']} \u53d8\u4e3a "
-              f"{m['shichen_effective']}\uff0c\u4e24\u76d8\u90fd\u8981\u770b")
+        print(f"  ⚠ 真太阳时使时辰由 {m['shichen_clock']} 变为 "
+              f"{m['shichen_effective']}，两盘都要看")
     if m["late_zi"]:
         alt = m["sect_alternative"]
-        print(f"  \u26a0 \u751f\u4e8e\u665a\u5b50\u65f6\u3002\u5f53\u524d\u7528{m['sect_name']}\uff1b"
-              f"\u53e6\u4e00\u6d41\u6d3e\u4f5c {' '.join(alt['pillars'])}\uff0c\u65e5\u4e3b\u4e3a {alt['day_master']}\u3002"
-              f"\u65e5\u4e3b\u4e0d\u540c\u5219\u5168\u76d8\u4e0d\u540c\uff0c\u5fc5\u987b\u5411\u547d\u4e3b\u8bf4\u660e\u53e3\u5f84")
+        print(f"  ⚠ 生于晚子时。当前用{m['sect_name']}；"
+              f"另一流派作 {' '.join(alt['pillars'])}，日主为 {alt['day_master']}。"
+              f"日主不同则全盘不同，必须向命主说明口径")

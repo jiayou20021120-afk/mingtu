@@ -130,18 +130,18 @@ def build(chart, target: date, span: int):
 def print_summary(chart, res, target):
     def line(tag, r):
         return (f"  {tag} {r['ganzhi']}({r['shishen_gan']}) "
-                f"{r['score']:>+5.2f}  \u5f3a:{r['best']} \u5f31:{r['worst']}  "
-                f"\u4e00\u81f4\u5ea6:{r['confidence']}")
-    print(f"{chart['meta']['name']} \u00b7 {target.isoformat()}")
-    print(line("\u6d41\u5e74", res["year"]))
-    print(line("\u6d41\u6708", res["month"]))
-    print(line("\u6d41\u65e5", res["day"]))
+                f"{r['score']:>+5.2f}  强:{r['best']} 弱:{r['worst']}  "
+                f"一致度:{r['confidence']}")
+    print(f"{chart['meta']['name']} · {target.isoformat()}")
+    print(line("流年", res["year"]))
+    print(line("流月", res["month"]))
+    print(line("流日", res["day"]))
     s = res["stacked"]
-    print(f"  \u53e0\u52a0  \u5f3a:{s['best']} {s['dims'][s['best']]:+.2f}  "
-          f"\u5f31:{s['worst']} {s['dims'][s['worst']]:+.2f}  "
-          f"\u4e3b\u5bfc\u5c42:{s['dominated_by']}")
+    print(f"  叠加  强:{s['best']} {s['dims'][s['best']]:+.2f}  "
+          f"弱:{s['worst']} {s['dims'][s['worst']]:+.2f}  "
+          f"主导层:{s['dominated_by']}")
     for n in res["day"]["notes"][:4]:
-        print(f"  \u00b7 {n}")
+        print(f"  · {n}")
     for u in res.get("upcoming", []):
         print(f"  {u['date']} {u['ganzhi']} {u['score']:+.2f} "
-              f"\u5f3a:{u['best']} \u5f31:{u['worst']}")
+              f"强:{u['best']} 弱:{u['worst']}")

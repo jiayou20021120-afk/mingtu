@@ -475,18 +475,18 @@ def build(chart, to_age, gender):
 
 def print_summary(out, out_path=None):
     if out_path:
-        print(f"\u2713 {out_path}  {len(out['years'])} \u5e74 / {len(out['cycles'])} \u6b65\u5927\u8fd0")
+        print(f"✓ {out_path}  {len(out['years'])} 年 / {len(out['cycles'])} 步大运")
     for c in out["cycles"]:
-        if c["ganzhi"] == "(\u8d77\u8fd0\u524d)":
+        if c["ganzhi"] == "(起运前)":
             continue
-        bar = "\u2588" * max(1, int(round(c["relative"] * 12)))
-        print(f"  {c['age_range'][0]:>2}-{c['age_range'][1]:<2}\u5c81 "
-              f"{c['ganzhi']}({c['shishen'] or '\u2014'}) {c['score']:>+5.2f} "
+        bar = "█" * max(1, int(round(c["relative"] * 12)))
+        print(f"  {c['age_range'][0]:>2}-{c['age_range'][1]:<2}岁 "
+              f"{c['ganzhi']}({c['shishen'] or '—'}) {c['score']:>+5.2f} "
               f"#{c['rank']}/{c['rank_of']} {bar:<12} "
-              f"\u5f3a:{c['dominant_dimension']} \u5f31:{c['weakest_dimension']}")
+              f"强:{c['dominant_dimension']} 弱:{c['weakest_dimension']}")
     tp = out["overview"]["turning_points"]
     if tp:
-        print(f"  \u5173\u952e\u8f6c\u6298 {len(tp)} \u5904\uff1a"
+        print(f"  关键转折 {len(tp)} 处："
               f"{', '.join(str(t['year']) for t in tp[:8])}")
     else:
-        print("  \u672a\u68c0\u51fa\u5f3a\u7ed3\u6784\u6027\u8f6c\u6298\u5e74\u4efd\uff08\u76d8\u9762\u5e73\u7a33\uff09")
+        print("  未检出强结构性转折年份（盘面平稳）")
