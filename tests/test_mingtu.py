@@ -246,3 +246,41 @@ def test_cli_exposes_every_documented_subcommand():
     names = set(actions[0].choices)
     assert {"full", "chart", "life", "day", "hour",
             "render", "profile"} <= names
+
+
+# ------------------------------------------------------------------ web form
+
+def test_form_page_renders_without_state():
+    from mingtu.serve import form_page
+    html_ = form_page()
+    assert html_.startswith("<!doctype html>")
+    assert 'action="/compute"' in html_
+    for field in ("name", "gender", "cal", "ymd", "hm", "city", "sect"):
+        assert f'name="{field}"' in html_
+    assert "不出网" in html_
+
+
+def test_form_page_preserves_input_on_error():
+    from mingtu.serve import form_page
+    html_ = form_page({"name": "妈妈", "ymd": "1969-7-8", "gender": "女"},
+                      error="日期格式不对")
+    assert "妈妈" in html_ and "1969-7-8" in html_
+    assert "日期格式不对" in html_
+
+
+def test_event_lines_parse_into_scored_events():
+    from mingtu.serve import parse_events
+    evs = parse_events("1988 考上大学 好\n2001 下岗 坏\n垃圾行\n2015年 买房 好")
+    assert [e["year"] for e in evs] == [1988, 2001, 2015]
+    assert [e["valence"] for e in evs] == [1, -1, 1]
+    assert evs[0]["dim"] == "学业"
+    assert evs[1]["dim"] == "事业"
+
+
+def test_chart_args_maps_form_to_builder():
+    from mingtu.serve import chart_args
+    a = chart_args({"cal": "lunar", "ymd": "1969/7/8", "hm": "6",
+                    "gender": "女", "city": "丹东", "sect": "1", "tst": "0"})
+    assert a.lunar == "1969-7-8" and a.solar is None
+    assert a.time == "06:00"
+    assert a.no_tst is True and a.sect == 1

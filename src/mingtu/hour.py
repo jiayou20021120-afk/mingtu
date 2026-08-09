@@ -18,22 +18,36 @@ SHICHEN = [("子", "23:30"), ("丑", "02:00"), ("寅", "04:00"), ("卯", "06:00"
            ("辰", "08:00"), ("巳", "10:00"), ("午", "12:00"), ("未", "14:00"),
            ("申", "16:00"), ("酉", "18:00"), ("戌", "20:00"), ("亥", "22:00")]
 
-# event wording -> which dimension should have moved that year
+# Event wording -> which dimension should have moved that year.
+# Ordered longest-key-first at match time, so 「下岗」 beats a bare 「岗」 and
+# 「离婚」 does not get read as 「离职」. The vocabulary leans deliberately
+# towards the involuntary events a Chinese family actually remembers by year:
+# 下岗, 参军, 分房, 拆迁 — these carry more signal than chosen ones.
 EVENT_DIM = {
-    "婚": "婚恋", "恋": "婚恋", "离": "婚恋", "分手": "婚恋",
-    "工作": "事业", "升职": "事业", "创业": "事业", "失业": "事业",
-    "调动": "事业", "跳槽": "事业", "裁员": "事业",
-    "财": "财富", "破财": "财富", "买房": "财富", "投资": "财富", "亏": "财富",
-    "病": "健康", "手术": "健康", "意外": "健康", "住院": "健康",
-    "考": "学业", "升学": "学业", "留学": "学业", "毕业": "学业", "读研": "学业",
-    "搬": "人际", "出国": "人际", "合伙": "人际", "移居": "人际",
+    "婚恋": {"结婚", "离婚", "订婚", "恋爱", "分手", "相亲", "领证", "再婚",
+             "丧偶", "同居", "怀孕", "生子", "生孩子", "生育", "流产"},
+    "事业": {"工作", "上班", "入职", "升职", "晋升", "创业", "失业", "下岗",
+             "裁员", "辞职", "跳槽", "调动", "转行", "退休", "参军", "入伍",
+             "转业", "复员", "开除", "提干", "评职称", "破产", "倒闭", "停薪"},
+    "财富": {"破财", "买房", "购房", "分房", "拆迁", "投资", "亏损", "赔钱",
+             "发财", "买车", "中奖", "欠债", "借钱", "还清", "financial", "财"},
+    "健康": {"生病", "手术", "住院", "意外", "车祸", "受伤", "骨折", "确诊",
+             "康复", "抑郁", "大病", "病"},
+    "学业": {"高考", "中考", "考研", "考上", "升学", "留学", "毕业", "读研",
+             "读博", "复读", "落榜", "考试", "考编", "考公", "进修", "考"},
+    "人际": {"搬家", "出国", "移居", "移民", "合伙", "官司", "诉讼", "绝交",
+             "和好", "认识", "搬"},
 }
+# longest keys first so specific wording wins over its own substring
+_EVENT_KEYS = sorted(
+    ((k, dim) for dim, ks in EVENT_DIM.items() for k in ks),
+    key=lambda kv: -len(kv[0]))
 
 
 def classify(desc):
-    for k, v in EVENT_DIM.items():
-        if k in desc:
-            return v
+    for key, dim in _EVENT_KEYS:
+        if key in desc:
+            return dim
     return None
 
 

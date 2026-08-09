@@ -33,6 +33,19 @@ cd mingtu && ./install.sh
 
 ## Use
 
+### Prefer a browser to a terminal
+
+```bash
+mingtu serve
+```
+
+Opens a local form. Binds to `127.0.0.1` only — birth data never leaves the
+machine it was typed on. No upload, no telemetry, no outbound request anywhere
+in the code. Tick "I don't know the birth hour" and the same page will recover
+it from life events.
+
+### Command line
+
 ```bash
 mingtu full --solar 1995-3-12 --time 14:20 --gender 女 --city 杭州 --today
 ```
@@ -40,6 +53,7 @@ mingtu full --solar 1995-3-12 --time 14:20 --gender 女 --city 杭州 --today
 Produces `chart.json`, `lifeline.json` and a self-contained HTML scroll.
 
 ```bash
+mingtu serve                                     # local web form
 mingtu chart  --solar 1995-3-12 --time 14:20 --gender 女 --city 杭州
 mingtu life   --chart chart.json --to-age 90
 mingtu day    --chart chart.json --span 7        # year / month / day fortune
@@ -107,9 +121,9 @@ L2  timeline   hard-coded                yearly six-dimension scoring, reconcili
 L3  narrative  left to the reader        writing discipline in skill/references/
 ```
 
-**Nothing in L0–L2 is generated.** Every同类 project converges on the same
-lesson: an LLM left to cast the chart itself gets the day pillar wrong, and one
-wrong pillar inverts everything after it.
+**Nothing in L0–L2 is generated.** Every comparable project converges on the
+same lesson: an LLM left to cast the chart itself gets the day pillar wrong,
+and one wrong pillar inverts everything after it.
 
 ---
 
@@ -142,7 +156,7 @@ python3 -m venv .venv && ./.venv/bin/pip install -e ".[dev]"
 ./.venv/bin/python -m pytest -q
 ```
 
-31 regression tests pin the deterministic layers so retuned weights fail loudly
+37 regression tests pin the deterministic layers so retuned weights fail loudly
 rather than drifting.
 
 ---

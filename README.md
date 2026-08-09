@@ -33,6 +33,18 @@ cd mingtu && ./install.sh
 
 ## 用
 
+### 不想碰命令行：开网页
+
+```bash
+mingtu serve
+```
+
+浏览器自动打开一个表单，填生辰点排盘就出结果。服务只绑 `127.0.0.1`，
+生辰数据全程不出这台机器——没有上传、没有统计、没有任何对外请求。
+不知道时辰的话，表单里勾上「我不知道出生时辰」，按提示写几件已发生的事就能反推。
+
+### 命令行
+
 一条命令跑完整个管线：
 
 ```bash
@@ -59,6 +71,7 @@ mingtu full --solar 1995-3-12 --time 14:20 --gender 女 --city 杭州 --name 张
 分步：
 
 ```bash
+mingtu serve                                        # 网页界面
 mingtu chart  --solar 1995-3-12 --time 14:20 --gender 女 --city 杭州
 mingtu life   --chart chart.json --to-age 90
 mingtu day    --chart chart.json --span 7          # 流年 / 流月 / 流日
@@ -163,12 +176,13 @@ src/mingtu/
   yunshi.py     流年/流月/流日
   hour.py       时辰反推
   render.py     单文件 HTML 人生长卷
+  serve.py      本地网页界面（只绑 127.0.0.1）
   profile.py    校准档案
   cli.py        统一入口
 skill/
   SKILL.md      给 AI agent 的入口：铁律、工作流、失败处理
   references/   干支表、旺衰格局、紫微星曜、时间轴规则、叙事纪律、校准协议
-tests/          31 项回归测试，锁住确定性层不漂移
+tests/          37 项回归测试，锁住确定性层不漂移
 ```
 
 ---

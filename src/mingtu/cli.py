@@ -18,6 +18,7 @@ from . import yunshi as yunshi_mod
 from . import hour as hour_mod
 from . import render as render_mod
 from . import profile as profile_mod
+from . import serve as serve_mod
 
 
 def _load(p):
@@ -129,6 +130,11 @@ def build_parser():
     p.add_argument("--to-year", type=int)
     p.add_argument("--today", action="store_true", help="附带今日运势")
     p.set_defaults(func=cmd_full)
+
+    p = sub.add_parser("serve", help="打开网页界面，在浏览器里填表排盘")
+    p.add_argument("--port", type=int, default=8848)
+    p.add_argument("--no-open", action="store_true", help="不自动打开浏览器")
+    p.set_defaults(func=serve_mod.run)
 
     p = sub.add_parser("chart", help="排盘 → chart.json")
     add_birth_args(p)
